@@ -1,0 +1,11 @@
+/venv
+/.idea
+/.vscode
+/tmp
+/__pycache__
+__pycache__
+.DS_Store
+.env
+/.env
+*.egg-info
+/*.log

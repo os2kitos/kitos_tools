@@ -1,0 +1,6 @@
+.*
+.env
+docker-compose.yml
+Dockerfile
+*.log
+__pycache__
