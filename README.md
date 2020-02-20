@@ -56,8 +56,14 @@ docker run --env-file=.env -p 5000:5000 kitos_tools_web
 eller via
 
 ```shell
-docker-compose up (efter det er lavet med en build)
+docker-compose up 
 ```
+efter der er lavet et image med 
+
+```shell
+docker build -t kitos_tools .
+```
+
 
 Filen ".env-example" viser hvordan lokale variabler bliver sat, så man kan holde brugernavne ude af git commits (den rigtige .env fil bør ikke være med i git eller docker)
 ```.env
