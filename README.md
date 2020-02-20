@@ -1,14 +1,59 @@
-# kitos2archimate
+# kitos_tools
 
-Flask (Pyton) app til data udveksling mellem Archimate modeller og OS2Kitos registrerede IT systemer.
+kitos_tools er en værktøjskasse til brug sammen med KITOS. 
+
+Projektet indeholder en række forskellige apps der alle gør brug af et fælles modul til at læse data fra KITOS.
+
 Applikationen er lavet i et samarbejde mellem Favrskov (pebi@favrskov.dk) og Holstebro kommune (asl@holstebro.dk)
 
-Scriptet kan køres med en simpel docker run
+Installation
+- 
+```shell
+git clone https://github.com/os2kitos/kitos_tools.git
+cd kitos_tools
+python -m venv venv
+source venv/Scripts/activate
+python -m pip install --upgrade pip
+pip install -e kitos_tools
+pip install -r requirements.txt
+```
+ 
+
+# Projektstruktur
+
+kitos_tools:
+-
+Generelle hjælpe funktioner og klasser til udlæsning af data fra KITOS, export til csv filer, osv.
+Anvendes som et selvstændigt python modul af de øvrige scripts i projektet.
+
+exporters:
+-
+Indeholder scripts der kan bruges til at eksportere data fra KITOS og gemme dem som csv filer og/eller json data.
+
+Scriptet kan køres således:
+```shell
+python exporters/general_export.py --[prod|test] --username=<user> --password=<password>
+```
+
+archimate:
+-
+(Vil du på sigt) Indeholde scripts udlæsning af data fra kommunens OS2Kitos registrerede IT systemer og indlæsning i en archimate model oprettet med det gratis Archimate tegneredskab "Archi" (www.archimatetool.com).
+
+service:
+-
+Simpel Flask (Pyton) app til udstilling af specialiserede forretningsservices på baggrund af data fra KITOS.
+
+Scriptet kan køres direkte fra roden af projektet
+```shell
+python service/app.py --[prod|test] --username=<user> --password=<password>
+```
+
+Det kan også køres med en simpel docker run
 ```shell
 docker run --env-file=.env -p 5000:5000 kitos_tools_web
 ```
 
-eller via 
+eller via
 
 ```shell
 docker-compose up (efter det er lavet med en build)
