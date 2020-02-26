@@ -231,3 +231,8 @@ class KitosHelper:
             }})
 
         return it_systems
+
+    def return_isystem_usage(self, system_id):
+        json_data = self._kitos_get(
+            f"api/ItSystemUsageOrgUnitUsage/{system_id}")
+        return json_data['response']
