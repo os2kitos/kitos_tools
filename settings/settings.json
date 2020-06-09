@@ -1,0 +1,8 @@
+{
+    "KITOS_AUTHURL": "https://kitos.dk/api/Authorize/gettoken",
+    "KITOS_BASEAPIURL": "https://kitos.dk/api",
+    "KITOS_USER": "sc@holstebro.dk",
+    "KITOS_PASSWORD": "bELt4ECP5VeZuFW",
+    "KITOS_ODATA_URL": "https://kitos.dk/odata",
+    "KITOS_URL": "https://kitos.dk"
+}

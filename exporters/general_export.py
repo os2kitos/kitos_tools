@@ -1,9 +1,17 @@
+import kitos_helper.kitos_logger as kl
+from kitos_helper.kitos_helper import KitosHelper
 import os
 import string
 import click
+import json
+import pathlib
 
-from kitos_helper.kitos_helper import KitosHelper
-import kitos_helper.kitos_logger as kl
+cfg_file = pathlib.Path.cwd() / 'settings' / 'settings.json'
+if not cfg_file.is_file():
+    raise Exception('No setting file')
+
+SETTINGS = json.loads(cfg_file.read_text())
+
 
 """
 Standard exports from KITOS. 
@@ -14,13 +22,14 @@ each municipality
 """
 
 
-@click.command()
-@click.option('--prod', 'server', flag_value='https://kitos.dk', help='https://kitos.dk')
-@click.option('--test', 'server', flag_value='https://kitostest.miracle.dk', help='https://kitostest.miracle.dk')
-@click.option('--username', help='UserID for user with API access')
-@click.option('--password', help='Password for user')
-def export_from_kitos(server, username, password):
-    k = KitosHelper(username, password, server, False, False)
+# @click.command()
+# @click.option('--prod', 'server', flag_value='https://kitos.dk', help='https://kitos.dk')
+# @click.option('--test', 'server', flag_value='https://kitostest.miracle.dk', help='https://kitostest.miracle.dk')
+# @click.option('--username', help='UserID for user with API access')
+# @click.option('--password', help='Password for user')
+def export_from_kitos():
+    k = KitosHelper(SETTINGS['KITOS_USER'], SETTINGS['KITOS_PASSWORD'],
+                    SETTINGS['KITOS_URL'], False, False)
     it_systems = k.return_itsystems()
 
     export_it_systems(k, it_systems, 'it_systemer.csv')

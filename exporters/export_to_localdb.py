@@ -2,8 +2,6 @@ import os
 import string
 import click
 import logging
-import mysql.connector
-from mysql.connector import Error
 
 
 from kitos_helper.kitos_helper import KitosHelper
@@ -26,27 +24,6 @@ logger = logging.getLogger("mysql-export")
 def export_to_mysql(server, username, password):
 
     logger.info("Export to mysql started")
-    try:
-        connection = mysql.connector.connect(host='0.0.0.0',
-                                             database='kitos',
-                                             user='kitos',
-                                             port='32768',
-                                             password='kitos')
-        if connection.is_connected():
-            db_Info = connection.get_server_info()
-            print("Connected to MySQL Server version ", db_Info)
-            cursor = connection.cursor()
-            cursor.execute("select database();")
-            record = cursor.fetchone()
-            print("You're connected to database: ", record)
-
-    except Error as e:
-        print("Error while connecting to MySQL", e)
-    finally:
-        if (connection.is_connected()):
-            cursor.close()
-            connection.close()
-            print("MySQL connection is closed")
 
     kh = KitosHelper(username, password, server, False, True)
     it_systems = kh.return_itsystems()

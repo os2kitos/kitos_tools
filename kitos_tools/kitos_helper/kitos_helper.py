@@ -221,7 +221,7 @@ class KitosHelper:
                 'Leverandør': it_system['itSystem']['belongsToName'],
                 'Leverandør ID': it_system['itSystem']['belongsToId'],
                 'Beskrivelse': it_system['itSystem']['description'],
-                'url': it_system['itSystem']['url'],
+                'url': '',  # it_system['itSystem']['url'],
                 'kle': self._read_kle_from_itsystem(it_system['itSystem']),
                 'Storm ID': it_system['itSystem']['businessTypeId'],
                 'Storm navn': it_system['itSystem']['businessTypeName'],
