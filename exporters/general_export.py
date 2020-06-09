@@ -1,10 +1,10 @@
+import json
+import os
+import pathlib
+import string
+
 import kitos_helper.kitos_logger as kl
 from kitos_helper.kitos_helper import KitosHelper
-import os
-import string
-import click
-import json
-import pathlib
 
 cfg_file = pathlib.Path.cwd() / 'settings' / 'settings.json'
 if not cfg_file.is_file():
@@ -22,11 +22,6 @@ each municipality
 """
 
 
-# @click.command()
-# @click.option('--prod', 'server', flag_value='https://kitos.dk', help='https://kitos.dk')
-# @click.option('--test', 'server', flag_value='https://kitostest.miracle.dk', help='https://kitostest.miracle.dk')
-# @click.option('--username', help='UserID for user with API access')
-# @click.option('--password', help='Password for user')
 def export_from_kitos():
     k = KitosHelper(SETTINGS['KITOS_USER'], SETTINGS['KITOS_PASSWORD'],
                     SETTINGS['KITOS_URL'], False, False)
