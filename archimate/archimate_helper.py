@@ -1,13 +1,13 @@
+import codecs
 import json
+import logging
 import os
 import pathlib
 import string
 import uuid
-import codecs
-
-import kitos_helper.kitos_logger as kl
-
 from xml.dom.minidom import parse, parseString
+
+logger = logging.getLogger("archimate-helper")
 
 cfg_file = pathlib.Path.cwd() / 'settings' / 'settings.json'
 if not cfg_file.is_file():
@@ -108,8 +108,11 @@ class ArchimateHelper:
     def get_named_application_folder(self, folder_name):
         return self._find_childnode_from_attributes(self.application_folder, "folder", {"name": folder_name})
 
-    def get_named_application_element(self, application_name):
+    def get_application_element_from_name(self, application_name):
         return self._find_childnode_from_attributes(self.application_folder, "element", {"name": application_name, "xsi:type": "archimate:ApplicationComponent"})
+
+    def get_application_element_from_id(self, application_id):
+        return self._find_childnode_from_attributes(self.application_folder, "element", {"id": application_id, "xsi:type": "archimate:ApplicationComponent"})
 
     def _find_childnode_from_attributes(self, dom_node, element_name, attributes):
         child_nodes = dom_node.getElementsByTagName(element_name)
