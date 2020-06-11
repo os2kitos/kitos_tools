@@ -12,3 +12,4 @@ __pycache__
 /*.csv
 *.json
 *.archimate
+*.db
