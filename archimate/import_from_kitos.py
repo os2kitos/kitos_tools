@@ -31,9 +31,11 @@ def update_archimate_model(infile, outfile, search_type):
 
     kh = KitosHelper(SETTINGS['KITOS_USER'], SETTINGS['KITOS_PASSWORD'],
                      SETTINGS['KITOS_URL'], False, False)
-    # it_systems = kh.return_itsystems()
+
+    #it_systems = kh.return_itsystems()
     sys_file = pathlib.Path.cwd() / 'itsystems.json'
     it_systems = json.loads(sys_file.read_text(encoding='utf-8'))
+    system_relations = kh.return_itsystem_relations()
 
     default_category = archi_helper.get_named_application_folder(
         SETTINGS["archimate.DEFAULT_CATEGORY"])
@@ -74,6 +76,12 @@ def update_archimate_model(infile, outfile, search_type):
             logger.info(
                 f"Application {it_system['Systemnavn']} with id {app_sys_id} created.")
 
+        if app_node.parentNode.getAttribute('name') != category_name:
+            # this app entry is old and Storm class for has changed
+            # move it to new category
+            app_node = archi_helper.move_application(
+                app_node, cat_node)
+
         if app_node.getAttribute('id') != app_sys_id:
             logger.info(
                 f"Updating systemid for {it_system['Systemnavn']}. Old id: {app_node.getAttribute('id')}, new id: {app_sys_id}")
@@ -91,7 +99,20 @@ def save_itsystems():
         json.dump(it_systems, outfile)
 
 
+def test_relations():
+    archi_helper = ah.ArchimateHelper("kitos.archimate", "test_out.archimate")
+    archi_helper.update_storm_structure()
+
+    kh = KitosHelper(SETTINGS['KITOS_USER'], SETTINGS['KITOS_PASSWORD'],
+                     SETTINGS['KITOS_URL'], False, False)
+
+    relations = kh.return_itsystem_relations()
+
+    archi_helper.update_application_relations(relations)
+
+
 if __name__ == '__main__':
     kl.start_logging("archimate_sync.log")
-    update_archimate_model()
+    # update_archimate_model()
     # save_itsystems()
+    test_relations()

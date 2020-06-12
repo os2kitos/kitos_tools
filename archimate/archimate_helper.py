@@ -25,12 +25,18 @@ class ArchimateHelper:
         self.replaced_ids = {}
 
         self.application_folder = None
+        self.relations_folder = None
 
         folder_elements = self.archi_dom.getElementsByTagName('folder')
 
         for folder in folder_elements:
             if folder.getAttribute('type') == 'application':
                 self.application_folder = folder
+
+            if folder.getAttribute('type') == 'relations':
+                self.relations_folder = folder
+
+            if self.relations_folder is not None and self.application_folder is not None:
                 break
 
     def save(self, strip_empty_lines=True):
@@ -85,8 +91,6 @@ class ArchimateHelper:
         element_node.setAttribute("id", application_id)
         self.replaced_ids.update({current_id: application_id})
 
-        return NotImplemented
-
     def _make_guid(self):
         return str(uuid.uuid4())
 
@@ -105,6 +109,28 @@ class ArchimateHelper:
                         storm_class)
                     app_node.appendChild(sub_app_node)
 
+    def update_application_relations(self, relations):
+        # find relations folder
+        for index in range(len(relations)):
+            relation = relations[index]
+            # re-use kitos relation uuid when inserting
+            relation_id = relation["uuid"]
+
+            # ystem source id
+            source_id = SETTINGS["archimate.APPLICATION_ID_PREFIX"] + \
+                str(relation["fromUsage"]["id"])
+            target_id = SETTINGS["archimate.APPLICATION_ID_PREFIX"] + \
+                str(relation["toUsage"]["id"])
+
+            rel_node = self._find_childnode_from_attributes(
+                self.relations_folder, "element", {"id": relation_id})
+
+            if rel_node is not None:
+                print("Found node!")
+            else:
+                print(
+                    f"new relation with source: {source_id} and target: {target_id} must be created")
+
     def get_named_application_folder(self, folder_name):
         return self._find_childnode_from_attributes(self.application_folder, "folder", {"name": folder_name})
 
@@ -113,6 +139,25 @@ class ArchimateHelper:
 
     def get_application_element_from_id(self, application_id):
         return self._find_childnode_from_attributes(self.application_folder, "element", {"id": application_id, "xsi:type": "archimate:ApplicationComponent"})
+
+    def move_application(self, app_node, new_parent_node):
+        """
+        //Clone existing node with all child nodes
+        $newEl = $applicationNode->cloneNode(true);
+        //Move to the current categoryNode
+        $newParentNode->appendChild($newEl);
+        //Delete existing node
+        $oldEl = $oldParentNode->removeChild($applicationNode);
+        return $newEl; 
+        """
+        new_element = app_node.cloneNode(True)
+        new_parent_node.appendChild(new_element)
+
+        parent_node = app_node.parentNode
+        parent_node.removeChild(app_node)
+        app_node.unlink()
+
+        return new_element
 
     def _find_childnode_from_attributes(self, dom_node, element_name, attributes):
         child_nodes = dom_node.getElementsByTagName(element_name)

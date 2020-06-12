@@ -215,13 +215,14 @@ class KitosHelper:
         for it_system in json_data['response']:
             it_systems.update({it_system['id']: {
                 'Systemnavn': it_system['itSystem']['name'],
+                'uuid': it_system['itSystem']['uuid'],
                 'Persondata': it_system['sensitiveDataTypeName'],
                 'note': it_system['note'],
                 'Ansvarlig org. enhed': it_system['responsibleOrgUnitName'],
                 'Leverandør': it_system['itSystem']['belongsToName'],
                 'Leverandør ID': it_system['itSystem']['belongsToId'],
                 'Beskrivelse': it_system['itSystem']['description'],
-                'url': '',  # it_system['itSystem']['url'],
+                'url': '',  # it_system['itSystem']['reference']['url'],
                 'kle': self._read_kle_from_itsystem(it_system['itSystem']),
                 'Storm ID': it_system['itSystem']['businessTypeId'],
                 'Storm navn': it_system['itSystem']['businessTypeName'],
@@ -236,3 +237,23 @@ class KitosHelper:
         json_data = self._kitos_get(
             f"api/ItSystemUsageOrgUnitUsage/{system_id}")
         return json_data['response']
+
+    def return_itsystem_relations(self):
+        system_relations = []
+
+        is_last_page = False
+        query_url = f"api/v1/systemrelations/defined-in/organization/{self.KITOS_KOMMUNEID}"
+        page_number = 0
+        while not is_last_page:
+            response = self._kitos_get(query_url,
+                                       {
+                                           "pageNumber": str(page_number),
+                                           "pageSize": "100",
+                                       })
+            if len(response['response']) > 0:
+                system_relations.extend(response['response'])
+                page_number += 1
+            else:
+                is_last_page = True
+
+        return system_relations
