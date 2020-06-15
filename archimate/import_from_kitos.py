@@ -32,60 +32,16 @@ def update_archimate_model(infile, outfile, search_type):
     kh = KitosHelper(SETTINGS['KITOS_USER'], SETTINGS['KITOS_PASSWORD'],
                      SETTINGS['KITOS_URL'], False, False)
 
-    #it_systems = kh.return_itsystems()
-    sys_file = pathlib.Path.cwd() / 'itsystems.json'
-    it_systems = json.loads(sys_file.read_text(encoding='utf-8'))
-    system_relations = kh.return_itsystem_relations()
+    #sys_file = pathlib.Path.cwd() / 'itsystems.json'
+    #it_systems = json.loads(sys_file.read_text(encoding='utf-8'))
 
-    default_category = archi_helper.get_named_application_folder(
-        SETTINGS["archimate.DEFAULT_CATEGORY"])
+    # import and/or update applications
+    it_systems = kh.return_itsystems()
+    archi_helper.update_applications(search_type, it_systems)
 
-    logger.info(f"Search type: {search_type}")
-
-    for sys_id, it_system in it_systems.items():
-        category_name = it_system['Storm navn'].replace(
-            "(STORM)", "").strip() if it_system['Storm navn'] != None else SETTINGS["archimate.DEFAULT_KLASSIFIKATION"]
-
-        cat_node = archi_helper.get_named_application_folder(category_name)
-        if cat_node == None:
-            # Create new category and put it under the default category
-            cat_id = SETTINGS["archimate.CATEGORY_ID_PREFIX"] + \
-                str(it_system['Storm ID'])
-            cat_node = archi_helper.create_application_folder(
-                category_name, cat_id)
-            default_category.appendChild(cat_node)
-            logger.info(f"New STORM classification created: {category_name}")
-
-        app_node = None
-        app_sys_id = SETTINGS["archimate.APPLICATION_ID_PREFIX"] + \
-            str(sys_id)
-
-        if search_type == 'name':
-            logger.info(f"Search for system name: {it_system['Systemnavn']}")
-            app_node = archi_helper.get_application_element_from_name(
-                it_system['Systemnavn'])
-        elif search_type == 'id':
-            logger.info(f"Search for system id: {app_sys_id}")
-            app_node = archi_helper.get_application_element_from_id(
-                app_sys_id)
-
-        if app_node == None:
-            app_node = archi_helper.create_application_element(
-                it_system['Systemnavn'], app_sys_id)
-            cat_node.appendChild(app_node)
-            logger.info(
-                f"Application {it_system['Systemnavn']} with id {app_sys_id} created.")
-
-        if app_node.parentNode.getAttribute('name') != category_name:
-            # this app entry is old and Storm class for has changed
-            # move it to new category
-            app_node = archi_helper.move_application(
-                app_node, cat_node)
-
-        if app_node.getAttribute('id') != app_sys_id:
-            logger.info(
-                f"Updating systemid for {it_system['Systemnavn']}. Old id: {app_node.getAttribute('id')}, new id: {app_sys_id}")
-            archi_helper.update_application_id(app_node, app_sys_id)
+    # import and/or update relations
+    relations = kh.return_itsystem_relations()
+    archi_helper.update_application_relations(relations)
 
     archi_helper.save()
 
@@ -100,7 +56,8 @@ def save_itsystems():
 
 
 def test_relations():
-    archi_helper = ah.ArchimateHelper("kitos.archimate", "test_out.archimate")
+    archi_helper = ah.ArchimateHelper(
+        "test_in.archimate", "test_out.archimate")
     archi_helper.update_storm_structure()
 
     kh = KitosHelper(SETTINGS['KITOS_USER'], SETTINGS['KITOS_PASSWORD'],
@@ -109,10 +66,11 @@ def test_relations():
     relations = kh.return_itsystem_relations()
 
     archi_helper.update_application_relations(relations)
+    archi_helper.save()
 
 
 if __name__ == '__main__':
     kl.start_logging("archimate_sync.log")
-    # update_archimate_model()
+    update_archimate_model()
     # save_itsystems()
-    test_relations()
+    # test_relations()
