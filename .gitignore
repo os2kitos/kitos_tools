@@ -10,5 +10,6 @@ __pycache__
 *.egg-info
 /*.log
 /*.csv
-*.json
+settings.json
+itsystems.json
 *.archimate

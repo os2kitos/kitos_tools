@@ -1,0 +1,49 @@
+{
+    "KITOS_AUTHURL": "https://kitos.dk/api/Authorize/gettoken",
+    "KITOS_USER": "user@kommune.dk",
+    "KITOS_PASSWORD": "password",
+    "KITOS_URL": "https://kitos.dk",
+    "archimate.DEFAULT_CATEGORY": "Andre",
+    "archimate.DEFAULT_KLASSIFIKATION": "Ikke klassificeret",
+    "archimate.APPLICATION_ID_PREFIX": "kitos_application_id_",
+    "archimate.CATEGORY_ID_PREFIX": "kitos_category_id_",
+    "archimate.STORM": {
+        "Kontor og Visualisering": [
+            "Kontorunderstøttelse",
+            "Skanning, kopiering og print",
+            "Design, visualisering og grafik"
+        ],
+        "Web og kommunikation": [
+            "Kommunikation",
+            "Hjemmesider og portaler",
+            "Selvbetjening og indberetning",
+            "E-læring"
+        ],
+        "Opgave- og processtøtte": [
+            "ESDH og Journalisering",
+            "Specialsystemer",
+            "Processtyring",
+            "IT management"
+        ],
+        "Økonomi og ressourcer": [
+            "Økonomi og betaling",
+            "Løn, personale og HR",
+            "Lagerstyring og logistik",
+            "Kundehåndtering"
+        ],
+        "Informations- og data management": [
+            "BI, forretningsanalyse og ledelsesinformation",
+            "Master data og registre",
+            "Søgning og opmærkning",
+            "GIS"
+        ],
+        "Infrastruktur og sikkerhed": [
+            "Basal infrastruktur og integration",
+            "Bruger- og rettighedsstyring",
+            "Sikkerhed og overvågning"
+        ],
+        "Andre": [
+            "Ikke klassificeret"
+        ]
+    }
+}
