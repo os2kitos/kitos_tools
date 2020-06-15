@@ -7,7 +7,10 @@ import string
 import click
 import logging
 import pandas as pd
+from pandas import json_normalize
 from sqlalchemy import create_engine
+from sqlalchemy import inspect
+from sqlalchemy import null
 
 from kitos_helper.kitos_helper import KitosHelper
 import kitos_helper.kitos_logger as kl
@@ -41,6 +44,7 @@ def export_to_mysql(server, username, password):
     else:
         kh = KitosHelper(username, password, server, False, True)
 
+    it_systems = kh.return_itsystems_softwareoversigt()
     it_systems = kh.return_itsystems()
 
     # organiser efter indhold af dict istedet for den numeret liste struktur. 
@@ -49,6 +53,27 @@ def export_to_mysql(server, username, password):
 
     #it_org_usage_list = []
     dataframe.info()
+
+##    json_response = kh.return_raw_json_response()['response']
+    #json_read = read(json_response)
+##    data = json.loads(json.dumps(json_response))
+##    json_data = json_normalize(data)
+
+    #json_data = pd.read_json(kh.return_raw_json_response()['response'],orient='index')
+
+    #dataframeRaw = json_normalize(json_data)
+
+    #dataframeRaw = json_data.set_index('id')
+##    dataframeRaw = pd.DataFrame.from_records(json_data)
+    #dataframeRaw = pd.DataFrame.from_dict(json_data, orient='index')
+
+    #dataframeRaw = pd.read_json(json_data,orient='index')
+    #dataframeRaw = json_data
+##    dataframeRaw.info()
+
+##    print(dataframeRaw.head())
+
+    #pd.set_option('display.max_columns', 500)
 
     # Gemmer 'rå' output til json fil.
     # with open('output.json', 'w') as outfile:
@@ -76,10 +101,27 @@ def export_to_mysql(server, username, password):
 # dtypes: float64(2), int64(1), object(11)
 # memory usage: 48.3+ KB
 
+    #dataframe.to_excel("test_regneark.xlsx")
+
+    #dataframe2NaN = dataframe.astype(object).where(pd.notnull(dataframe), None)
+    #dataframe.to_string()
+    # print(dataframe.index)
+    # print(dataframe.head())
+    # print(dataframe.tail(3))
+    # print(dataframe.describe())
     
-    engine = create_engine('sqlite:///test_sqlite.db', echo=True)
+
+
+    engine = create_engine('mysql+pymysql://kitos_ext:kitos@20admiis115/kitos?charset=utf8mb4', echo=True)#, json_serializer=lambda obj: json.dumps(obj, ensure_ascii=False)
+    #engine = create_engine('sqlite:///test_sqlite.db', echo=True)
     with engine.connect() as conn, conn.begin():
-        dataframe.to_sql('jsontest', conn, if_exists='append', index=False)
+        #conn.execute(table.insert(), json_value=null())
+        # print(type(conn))
+        # inspector = inspect(engine)
+        # print(inspector.get_table_names())
+        # print(inspector.get_columns('EX1'))
+        # dataframe.to_sql('jsontest2', conn, if_exists='append', index=False)
+        dataframe.to_sql('jsontest3', conn, if_exists='replace', index=True, chunksize=1)
 
 # sqlite3.InterfaceError: Error binding parameter 8 - probably unsupported type.
 

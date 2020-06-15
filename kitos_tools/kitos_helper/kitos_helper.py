@@ -185,6 +185,22 @@ class KitosHelper:
 
         return rights
 
+    def _read_url_from_itsystem(self, it_system_externalReferences):
+        urls = {}
+
+        for url in it_system_externalReferences:
+            urls.update({url['title']: url['url']})
+
+        return urls
+    
+    def _read_dataWorker_from_itsystem(self, it_system_associatedDataWorkers):
+        dataWorkers = {}
+
+        for dataWorker in it_system_associatedDataWorkers:
+            dataWorkers.update({dataWorker['dataWorkerName']: dataWorker['dataWorkerCvr']})
+
+        return dataWorkers
+
     def _read_contracts_from_itsystem(self, it_system_contracts):
         contracts = {}
 
@@ -232,7 +248,37 @@ class KitosHelper:
 
         return it_systems
 
+    def return_itsystems_softwareoversigt(self):
+
+        json_data = self._get_itsystems_usage()
+
+        it_systems = {}
+
+        for it_system in json_data['response']:
+            it_systems.update({it_system['id']: {
+                'Systemnavn': it_system['itSystem']['name'],
+                'Persondata': it_system['sensitiveDataTypeName'],
+                'note': it_system['note'],
+                'Ansvarlig org. enhed': it_system['responsibleOrgUnitName'],
+                'Leverandør': it_system['itSystem']['belongsToName'],
+                'Leverandør ID': it_system['itSystem']['belongsToId'],
+                'Beskrivelse': it_system['itSystem']['description'],
+                'url': self._read_url_from_itsystem(it_system['itSystem']), # it_system['itSystem']['url'],
+                'kle': self._read_kle_from_itsystem(it_system['itSystem']),
+                'Storm ID': it_system['itSystem']['businessTypeId'],
+                'Storm navn': it_system['itSystem']['businessTypeName'],
+                'Roller': self._read_rights_from_itsystem(it_system['rights']),
+                'Hovedkontrakt ID': it_system['mainContractId'],
+                'Kontrakter': self._read_contracts_from_itsystem(it_system['contracts']),
+                'Forretningskritisk': it_system['itSystem']['isBusinessCritical'],
+            }})
+
+        return it_systems
+
     def return_isystem_usage(self, system_id):
         json_data = self._kitos_get(
             f"api/ItSystemUsageOrgUnitUsage/{system_id}")
         return json_data['response']
+
+    def return_raw_json_response(self):
+        return self._get_itsystems_usage()
