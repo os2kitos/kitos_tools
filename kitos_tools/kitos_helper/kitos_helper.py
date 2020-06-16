@@ -94,13 +94,19 @@ class KitosHelper:
             return json_data
 
     def _write_csv(self, fieldnames, rows, filename):
-        """ Write a csv-file from a a dataset. Only fields explicitly mentioned
+        """
+        Write a csv-file from a a dataset. Only fields explicitly mentioned
         in fieldnames will be saved, the rest will be ignored.
+
         :param fieldnames: The headline for the columns, also act as filter.
+        :type fieldnames: [type]
         :param rows: A list of dicts, each list element will become a row, keys
         in dict will be matched to fieldnames.
+        :type rows: [type]
         :param filename: The name of the exported file.
+        :type filename: [type]        
         """
+
         print('Encode ascii: {}'.format(self.export_ansi))
         with open(filename, encoding='utf-8', mode='w') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames,
@@ -156,10 +162,20 @@ class KitosHelper:
             print('HTTP Request failed')
 
     def _get_itsystems_count(self):
+        """[summary]
+
+        :return: [description]
+        :rtype: [type]
+        """
         json_data = self._get_itsystems_usage()
         return len(json_data['response'])
 
     def _get_itsystems_usage(self):
+        """[summary]
+
+        :return: [description]
+        :rtype: [type]
+        """
         return self._kitos_get("api/ItSystemUsage",
                                {
                                    "organizationId": self.KITOS_KOMMUNEID,
@@ -213,6 +229,10 @@ class KitosHelper:
         it_systems = {}
 
         for it_system in json_data['response']:
+            description = it_system['itSystem']['description']
+            if description is not None:
+                description = description.replace("\n", " ").replace("\r", " ")
+
             it_systems.update({it_system['id']: {
                 'Systemnavn': it_system['itSystem']['name'],
                 'uuid': it_system['itSystem']['uuid'],
@@ -221,7 +241,8 @@ class KitosHelper:
                 'Ansvarlig org. enhed': it_system['responsibleOrgUnitName'],
                 'Leverandør': it_system['itSystem']['belongsToName'],
                 'Leverandør ID': it_system['itSystem']['belongsToId'],
-                'Beskrivelse': it_system['itSystem']['description'],
+                # replace newlines in descripts
+                'Beskrivelse': description,
                 'url': '',  # it_system['itSystem']['reference']['url'],
                 'kle': self._read_kle_from_itsystem(it_system['itSystem']),
                 'Storm ID': it_system['itSystem']['businessTypeId'],
@@ -234,6 +255,13 @@ class KitosHelper:
         return it_systems
 
     def return_isystem_usage(self, system_id):
+        """[summary]
+
+        :param system_id: [description]
+        :type system_id: [type]
+        :return: [description]
+        :rtype: [type]
+        """
         json_data = self._kitos_get(
             f"api/ItSystemUsageOrgUnitUsage/{system_id}")
         return json_data['response']
