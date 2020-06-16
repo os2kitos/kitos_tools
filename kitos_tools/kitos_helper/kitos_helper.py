@@ -188,7 +188,10 @@ class KitosHelper:
     def _read_url_from_itsystem(self, it_system_externalReferences):
         urls = {}
 
+        #print(it_system_externalReferences)
+
         for url in it_system_externalReferences:
+            
             urls.update({url['title']: url['url']})
 
         return urls
@@ -263,14 +266,14 @@ class KitosHelper:
                 'Leverandør': it_system['itSystem']['belongsToName'],
                 'Leverandør ID': it_system['itSystem']['belongsToId'],
                 'Beskrivelse': it_system['itSystem']['description'],
-                'url': self._read_url_from_itsystem(it_system['itSystem']), # it_system['itSystem']['url'],
+                'url': '',  #'url': self._read_url_from_itsystem(it_system['itSystem']), # it_system['itSystem']['url'],
                 'kle': self._read_kle_from_itsystem(it_system['itSystem']),
                 'Storm ID': it_system['itSystem']['businessTypeId'],
                 'Storm navn': it_system['itSystem']['businessTypeName'],
                 'Roller': self._read_rights_from_itsystem(it_system['rights']),
                 'Hovedkontrakt ID': it_system['mainContractId'],
                 'Kontrakter': self._read_contracts_from_itsystem(it_system['contracts']),
-                'Forretningskritisk': it_system['itSystem']['isBusinessCritical'],
+                'Forretningskritisk': it_system['isBusinessCritical'],
             }})
 
         return it_systems
