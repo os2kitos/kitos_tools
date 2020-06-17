@@ -104,7 +104,7 @@ class KitosHelper:
         in dict will be matched to fieldnames.
         :type rows: [type]
         :param filename: The name of the exported file.
-        :type filename: [type]        
+        :type filename: [type]
         """
 
         print('Encode ascii: {}'.format(self.export_ansi))
@@ -186,10 +186,11 @@ class KitosHelper:
         return self._get_itsystems_count()
 
     def _read_kle_from_itsystem(self, it_system):
-        kle_data = {}
+        kle_data = []
 
         for kle in it_system['taskRefs']:
-            kle_data.update({kle['taskKey']: kle['description']})
+            kle_data.append(
+                {"TaskKey": kle['taskKey'], "Description": kle['description']})
 
         return kle_data
 
@@ -197,7 +198,11 @@ class KitosHelper:
         rights = {}
 
         for right in it_system_rights:
-            rights.update({right['roleName']: right['userEmail']})
+            user_name = right['user']['name'] + \
+                " " + right['user']['lastName']
+
+            rights.update(
+                {right['roleName']: {"name": user_name, "email": right['userEmail']}})
 
         return rights
 
@@ -213,11 +218,22 @@ class KitosHelper:
                 'Navn': c_data['name'],
                 'Kontrakt ID': c_data['id'],
                 'Leverandør': c_data['supplierName'],
+                'Type': c_data['contractTypeName'],
                 'Aftaleelementer': c_elements,
             }
             contracts.update({c_data['id']: contract})
 
         return contracts
+
+    def convert_sensitity_level(self, level_data):
+        level = ""
+        levels = ["Ingen persondata", "Almindelige persondata",
+                  "Følsomme persondata", "Straffedomme og lovovertrædelser"]
+
+        for slevel in level_data:
+            level = levels[slevel['dataSensitivityLevel']]
+
+        return level
 
     def return_itsystems(self):
         # hent liste over anvendte IT systemer ud fra kommuneID i Kitos
@@ -233,23 +249,33 @@ class KitosHelper:
             if description is not None:
                 description = description.replace("\n", " ").replace("\r", " ")
 
+            system_url = "https://kitos.dk/#/system/usage/" + \
+                str(it_system['id']) + "/main"
+
             it_systems.update({it_system['id']: {
                 'Systemnavn': it_system['itSystem']['name'],
+                'Kaldenavn': it_system['localCallName'],
                 'uuid': it_system['itSystem']['uuid'],
-                'Persondata': it_system['sensitiveDataTypeName'],
+                'Persondata': self.convert_sensitity_level(it_system['sensitiveDataLevels']),
                 'note': it_system['note'],
                 'Ansvarlig org. enhed': it_system['responsibleOrgUnitName'],
                 'Leverandør': it_system['itSystem']['belongsToName'],
                 'Leverandør ID': it_system['itSystem']['belongsToId'],
                 # replace newlines in descripts
                 'Beskrivelse': description,
-                'url': '',  # it_system['itSystem']['reference']['url'],
+                'url': system_url,
                 'kle': self._read_kle_from_itsystem(it_system['itSystem']),
                 'Storm ID': it_system['itSystem']['businessTypeId'],
                 'Storm navn': it_system['itSystem']['businessTypeName'],
                 'Roller': self._read_rights_from_itsystem(it_system['rights']),
                 'Hovedkontrakt ID': it_system['mainContractId'],
                 'Kontrakter': self._read_contracts_from_itsystem(it_system['contracts']),
+                'BusinessTypeName': it_system['itSystem']['businessTypeName'],
+                'isBusinessCritical': it_system['isBusinessCritical'],
+                'dba_name': it_system['linkToDirectoryUrlName'],
+                'dba_url': it_system['linkToDirectoryUrl'],
+                'dba_note': it_system['noteUsage'],
+                'dba_workers': it_system['associatedDataWorkers']
             }})
 
         return it_systems
