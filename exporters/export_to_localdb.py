@@ -64,7 +64,9 @@ def export_to_mysql(server, username, password):
     engine = create_engine(connectString, echo=False)
     
     with engine.connect() as conn, conn.begin():
-        dataframe.to_sql('jsontest1', conn, if_exists='replace', index=True, chunksize=1, dtype={'kle': types.JSON, 'Roller': types.JSON, 'Kontrakter': types.JSON})
+        dataframe.to_sql('jsontest1', conn, if_exists='replace', index=True,
+        chunksize=1, dtype={'kle': types.JSON, 'Roller': types.JSON,
+        'url': types.JSON, 'Kontrakter': types.JSON, 'dba_workers': types.JSON})
 
 if __name__ == '__main__':
     kl.start_logging("mysql_export.log")

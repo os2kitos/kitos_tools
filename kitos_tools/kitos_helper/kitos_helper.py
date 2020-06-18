@@ -216,6 +216,7 @@ class KitosHelper:
                 'Navn': c_data['name'],
                 'Kontrakt ID': c_data['id'],
                 'Leverandør': c_data['supplierName'],
+                'Type': c_data['contractTypeName'],
                 'Aftaleelementer': c_elements,
             }
             contracts.update({c_data['id']: contract})
@@ -258,6 +259,10 @@ class KitosHelper:
         it_systems = {}
 
         for it_system in json_data['response']:
+
+            system_url = "https://kitos.dk/#/system/usage/" + \
+                str(it_system['id']) + "/main"
+
             it_systems.update({it_system['id']: {
                 'Systemnavn': it_system['itSystem']['name'],
                 'Persondata': it_system['sensitiveDataTypeName'],
@@ -266,14 +271,19 @@ class KitosHelper:
                 'Leverandør': it_system['itSystem']['belongsToName'],
                 'Leverandør ID': it_system['itSystem']['belongsToId'],
                 'Beskrivelse': it_system['itSystem']['description'],
-                'url': '',  #'url': self._read_url_from_itsystem(it_system['itSystem']), # it_system['itSystem']['url'],
+                'url': system_url,
                 'kle': self._read_kle_from_itsystem(it_system['itSystem']),
                 'Storm ID': it_system['itSystem']['businessTypeId'],
                 'Storm navn': it_system['itSystem']['businessTypeName'],
                 'Roller': self._read_rights_from_itsystem(it_system['rights']),
                 'Hovedkontrakt ID': it_system['mainContractId'],
                 'Kontrakter': self._read_contracts_from_itsystem(it_system['contracts']),
+                'Forretningstype': it_system['itSystem']['businessTypeName'],
                 'Forretningskritisk': it_system['isBusinessCritical'],
+                'dba_name': it_system['linkToDirectoryUrlName'],
+                'dba_url': it_system['linkToDirectoryUrl'],
+                'dba_note': it_system['noteUsage'],
+                'dba_workers': it_system['associatedDataWorkers'],
             }})
 
         return it_systems
