@@ -256,6 +256,9 @@ class KitosHelper:
 
         json_data = self._get_itsystems_usage()
 
+        with open('itsystem.json', 'w') as outfile:
+            json.dump(json_data, outfile)
+
         it_systems = {}
 
         for it_system in json_data['response']:
@@ -284,6 +287,11 @@ class KitosHelper:
                 'dba_url': it_system['linkToDirectoryUrl'],
                 'dba_note': it_system['noteUsage'],
                 'dba_workers': it_system['associatedDataWorkers'],
+                'uuid': it_system['itSystem']['uuid'],
+                'LocalName': it_system['localCallName'],
+                # Er under roller!
+                #'TestResponsible_name': it_system['rights']['userName'],
+                #'OperationalResponsible_email': it_system['risks']['responsibleUser']['email'],
             }})
 
         return it_systems
