@@ -21,6 +21,12 @@ pip install -r requirements.txt
 
 # Projektstruktur
 
+settings:
+-
+Den folder skal indeholde en fil med navnet "settings.json"
+Denne fil læses af alle scripts og bruges til at styre indstillingerne for scripts, f.eks. brugernavn og adgangskode til Kitos, osv.
+
+
 kitos_tools:
 -
 Generelle hjælpe funktioner og klasser til udlæsning af data fra KITOS, export til csv filer, osv.
@@ -28,16 +34,25 @@ Anvendes som et selvstændigt python modul af de øvrige scripts i projektet.
 
 exporters:
 -
-Indeholder scripts der kan bruges til at eksportere data fra KITOS og gemme dem som csv filer og/eller json data.
+Indeholder scripts der kan bruges til at eksportere data fra KITOS og gemme dem som csv filer og/eller json data, samt indlæse dem til en MySQL database.
 
-Scriptet kan køres således:
+Genereral export scriptet kan køres således:
 ```shell
-python exporters/general_export.py --[prod|test] --username=<user> --password=<password>
+python exporters/general_export.py
 ```
 
 archimate:
 -
-(Vil du på sigt) Indeholde scripts udlæsning af data fra kommunens OS2Kitos registrerede IT systemer og indlæsning i en archimate model oprettet med det gratis Archimate tegneredskab "Archi" (www.archimatetool.com).
+Indeholder scripts der kan bruges til at importere IT systemer og deres relationer fra Kitos ind i en archimate model. 
+
+IT systemer oversættes til Applications i Archimate modellen og relationer bliver til simple association relationsships.
+
+Scriptet kan køres således:
+```shell
+python archimate/import_from_kitos.py --[name|id] --infile=<architemate file> --outfile=<architemate file>
+```
+--name eller --id angiver om der skal importeres fra Kitos ved hjælp navnet på IT Systemet eller om der skal anvendes ID fra Kitos.
+Hvis det importeres til en tom archimate model eller en model hvor der allerede er importeres via navn, skal --id anvendes fremover.
 
 service:
 -
