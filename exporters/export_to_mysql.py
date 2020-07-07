@@ -131,7 +131,7 @@ def export_to_mysql():
 def update_itsystems(rows):
     try:
         conn = mysql.connector.connect(
-            host=SETTINGS['mysql.HOST'], database=SETTINGS['mysql.DB'], user=SETTINGS['mysql.USER'], password=SETTINGS['mysql.PASSWORD'])
+            host=SETTINGS['mysql.HOST'], port=SETTINGS['mysql.PORT'], database=SETTINGS['mysql.DB'], user=SETTINGS['mysql.USER'], password=SETTINGS['mysql.PASSWORD'])
 
         if not conn.is_connected():
             raise mysql.connector.Error(msg=f"Could not connect to database")

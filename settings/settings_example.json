@@ -3,6 +3,17 @@
     "KITOS_USER": "user@kommune.dk",
     "KITOS_PASSWORD": "password",
     "KITOS_URL": "https://kitos.dk",
+    "mysql.HOST": "127.0.0.1",
+    "mysql.PORT": "3306",
+    "mysql.USER": "kitos",
+    "mysql.PASSWORD": "kitos",
+    "mysql.DB": "kitos",
+    "mysql.SYSTEMS_TABLE": "cached_data",
+    "mysql.DATALEVEL_TRANSLATION": {
+        "PERSONALDATANDSENSITIVEDATA": "Persondata og følsomme persondata",
+        "PERSONALDATA": "Persondata",
+        "NONE": "Ingen persondata"
+    },
     "archimate.DEFAULT_CATEGORY": "Andre",
     "archimate.DEFAULT_KLASSIFIKATION": "Ikke klassificeret",
     "archimate.APPLICATION_ID_PREFIX": "kitos_application_id_",

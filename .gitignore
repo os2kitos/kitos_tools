@@ -2,6 +2,7 @@
 /.idea
 /.vscode
 /tmp
+/docs
 /__pycache__
 __pycache__
 .DS_Store
@@ -13,3 +14,4 @@ __pycache__
 settings.json
 itsystems.json
 *.archimate
+*.bat
