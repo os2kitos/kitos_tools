@@ -89,7 +89,7 @@ class KitosHelper:
 
             json_data = response.json()
             self.token = json_data['response']['token']
-            self.KITOS_KOMMUNEID = json_data['response']['activeOrganizationId']
+            #self.KITOS_KOMMUNEID = json_data['response']['activeOrganizationId']
 
             return json_data
 
@@ -162,9 +162,19 @@ class KitosHelper:
     def _get_itsystems_usage(self):
         return self._kitos_get("api/ItSystemUsage",
                                {
-                                   "organizationId": self.KITOS_KOMMUNEID,
-                                   "q": "",
+                                   #"organizationId": self.KITOS_KOMMUNEID,
+                                   #"q": "",
                                })
+    def _get_organizationId(self):
+        """[summary]
+
+        :return: [description]
+        :rtype: [type]
+        """
+        return self._kitos_get("api/Authorize",{})
+                               #"organizationId": self.KITOS_KOMMUNEID,
+
+
 
     def return_itsystems_count(self):
         return self._get_itsystems_count()
