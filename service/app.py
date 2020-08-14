@@ -42,6 +42,13 @@ def connect_status():
     return 'to be implemented'
 
 
+@app.route('/kitoskommuneid')
+def show_kitos_kommuneid():
+    # todo: Denne metode er beregnet til at lave et hurtigt tjek af om brugers login er gyldigt, og om Kitos API'et
+    #  kører
+    kh = KitosHelper(KITOS_USER, KITOS_PASSWORD, KITOS_URL, False, False)
+    return f'Aktuelle kommuneid: {kh.return_kitos_kommuneid()}'
+
 @app.route('/itsystemer')
 def list_systemer():
     # todo: denne metode er beregnnet til at hente en liste over IT systemer - det skal nærmere vurderes detajlegrad
