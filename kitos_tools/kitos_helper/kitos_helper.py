@@ -90,6 +90,8 @@ class KitosHelper:
             json_data = response.json()
             self.token = json_data['response']['token']
             #self.KITOS_KOMMUNEID = json_data['response']['activeOrganizationId']
+            # _set_kitos_kommuneid
+            self._set_kitos_kommuneid()
 
             return json_data
 
@@ -171,7 +173,13 @@ class KitosHelper:
 
     def _set_kitos_kommuneid(self):
         json_data = self._get_organizationId()
-        self.KITOS_KOMMUNEID = json_data['response']['id']
+        #self.KITOS_KOMMUNEID = json_data['response']['id']
+        print( json_data['response'])
+        ids = []
+        for item in json_data['response']:
+            ids.append(item)#['response'])
+        print(ids)
+        print([json_data_item[0] for json_data_item in json_data])
         #return 
                             
     def _get_organizationId(self):

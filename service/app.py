@@ -6,7 +6,7 @@ import secrets
 from flask import Flask, session, jsonify
 # from flask.ext.session import Session
 
-
+import kitos_helper.kitos_logger as kl
 from kitos_helper.kitos_helper import KitosHelper
 
 app = Flask(__name__)
@@ -26,6 +26,7 @@ KITOS_PASSWORD = os.environ['KITOS_PASSWORD']
 KITOS_URL = os.environ['KITOS_URL']
 FLASK_APP_DEBUG: int = int(os.environ['FLASK_DEBUG'])
 
+kl.start_logging("kitos.log")
 
 @app.route('/')
 def index_page():
