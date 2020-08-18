@@ -89,9 +89,9 @@ class KitosHelper:
 
             json_data = response.json()
             self.token = json_data['response']['token']
-            self.KITOS_KOMMUNEID = json_data['response']['activeOrganizationId']
 
-            return json_data
+            json_data = self._kitos_get("api/authorize/GetOrganizations")
+            self.KITOS_KOMMUNEID = json_data['response'][0]['id']
 
     def _write_csv(self, fieldnames, rows, filename):
         """
@@ -179,7 +179,7 @@ class KitosHelper:
         return self._kitos_get("api/ItSystemUsage",
                                {
                                    "organizationId": self.KITOS_KOMMUNEID,
-                                   "q": "",
+                                   "take": "500"
                                })
 
     def return_itsystems_count(self):

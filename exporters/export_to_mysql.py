@@ -173,15 +173,10 @@ def update_itsystems(rows):
         cursor.executemany(query, rows)
 
         conn.commit()
+        conn.close()
 
     except mysql.connector.Error as e:
         logger.error(f"Got error when connecting to mysql db: {e}")
-
-    finally:
-
-        cursor.close()
-        if conn is not None and conn.is_connected():
-            conn.close()
 
 
 if __name__ == '__main__':
