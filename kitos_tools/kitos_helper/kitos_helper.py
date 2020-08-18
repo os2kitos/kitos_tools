@@ -89,8 +89,6 @@ class KitosHelper:
 
             json_data = response.json()
             self.token = json_data['response']['token']
-            #self.KITOS_KOMMUNEID = json_data['response']['activeOrganizationId']
-            # _set_kitos_kommuneid
             self._set_kitos_kommuneid()
 
             return json_data
@@ -173,14 +171,7 @@ class KitosHelper:
 
     def _set_kitos_kommuneid(self):
         json_data = self._get_organizationId()
-        #self.KITOS_KOMMUNEID = json_data['response']['id']
-        print( json_data['response'])
-        ids = []
-        for item in json_data['response']:
-            ids.append(item)#['response'])
-        print(ids)
-        print([json_data_item[0] for json_data_item in json_data])
-        #return 
+        self.KITOS_KOMMUNEID = json_data['response'][0]['id']
                             
     def _get_organizationId(self):
         """[summary]
@@ -189,8 +180,6 @@ class KitosHelper:
         :rtype: [type]
         """
         return self._kitos_get("api/authorize/GetOrganizations",{})
-                               #"organizationId": self.KITOS_KOMMUNEID,
-                               #GetOrganizations
 
     def return_kitos_kommuneid(self):
         return self.KITOS_KOMMUNEID
@@ -216,8 +205,6 @@ class KitosHelper:
 
     def _read_url_from_itsystem(self, it_system_externalReferences):
         urls = {}
-
-        #print(it_system_externalReferences)
 
         for url in it_system_externalReferences:
             
