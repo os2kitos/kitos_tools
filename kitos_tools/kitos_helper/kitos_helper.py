@@ -165,8 +165,8 @@ class KitosHelper:
     def _get_itsystems_usage(self):
         return self._kitos_get("api/ItSystemUsage",
                                {
-                                   #"organizationId": self.KITOS_KOMMUNEID,
-                                   #"q": "",
+                                   "organizationId": self.KITOS_KOMMUNEID,
+                                   "take": "500"
                                })
 
     def _set_kitos_kommuneid(self):
