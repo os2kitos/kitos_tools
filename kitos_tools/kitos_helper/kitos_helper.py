@@ -166,6 +166,7 @@ class KitosHelper:
         return self._kitos_get("api/ItSystemUsage",
                                {
                                    "organizationId": self.KITOS_KOMMUNEID,
+                                   "q": "",
                                    "take": "500"
                                })
 
