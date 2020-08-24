@@ -73,6 +73,7 @@ def display_token():
 def systemer_i_brug():
     kh = KitosHelper(KITOS_USER, KITOS_PASSWORD, KITOS_URL, False, False)
     it_systems = kh.return_itsystems()
+    print(it_systems)
     return jsonify(it_systems)
 
 
