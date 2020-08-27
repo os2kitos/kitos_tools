@@ -53,7 +53,8 @@ def show_kitos_kommuneid():
 @app.route('/itsystemer')
 def list_systemer():
     # todo: denne metode er beregnnet til at hente en liste over IT systemer - det skal nærmere vurderes detajlegrad
-    return 'to be implemented'
+    kh = KitosHelper(KITOS_USER, KITOS_PASSWORD, KITOS_URL, False, False)
+    return kh._get_itsystems_usage()
 
 
 # Verdens bedste ændringer fra Anders

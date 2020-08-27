@@ -179,11 +179,10 @@ class KitosHelper:
         :return: [description]
         :rtype: [type]
         """
-        return self._kitos_get(f"api/ItSystemUsage/{self.KITOS_KOMMUNEID}",
+        return self._kitos_get(f"api/ItSystemUsage/",
                                {
-                                   #"organizationId": self.KITOS_KOMMUNEID,
-                                   #"q": "",
-                                   "take": "100"
+                                   "q": "",
+                                   "take": "500"
                                })
 
     def _set_kitos_kommuneid(self):
@@ -277,12 +276,12 @@ class KitosHelper:
 
         # Rewrite scructure for IT Systems
         json_data = self._get_itsystems_usage()
-
+        
         it_systems = {}
-        print(json_data)
-
+        
         for it_system in json_data['response']:
-            description = it_system[it_system]['description']
+        
+            description = it_system['itSystem']['description']
             if description is not None:
                 description = description.replace("\n", " ").replace("\r", " ")
 
