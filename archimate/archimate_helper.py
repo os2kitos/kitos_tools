@@ -93,6 +93,12 @@ class ArchimateHelper:
     </element>
     """
 
+    def create_element(self, element_name, element_attributes):
+        newElement = self.archi_dom.createElement(element_name)
+        for attribute_name, attribute_value in element_attributes.items():
+            newElement.setAttribute(attribute_name, attribute_value)
+        return newElement
+
     def create_relation_element(self, relation_id, source_id, target_id, documentation=None):
 
         newElement = self.archi_dom.createElement("element")
@@ -205,9 +211,42 @@ class ArchimateHelper:
                     f"Updating systemid for {it_system['Systemnavn']}. Old id: {app_node.getAttribute('id')}, new id: {app_sys_id}")
                 self.update_application_id(app_node, app_sys_id)
 
+            # Add properties to application node
+            # <property key="Systemejer" value="Anders Sølbech Larsen"/>
+            properties = {}
+            # add leverandør
+            supplier = it_system.get('Leverandør')
+            if supplier != None:
+                properties.update({"Leverandør": supplier})
+
+            # Look for roles
+            roller = it_system.get('Roller')
+            if(roller != None):
+                for rolename, roleinfo in roller.items():
+                    role_value = f"{roleinfo['name']} - {roleinfo['email']}"
+                    properties.update({rolename: role_value})
+
+            self.update_application_properties(app_node, properties)
+
+    def update_application_properties(self, app_node, properties):
+        for pkey, property_value in properties.items():
+            property_key = SETTINGS['archimate.PROPERTY_NAME_PREFIX'] + pkey
+            property_node = self._find_childnode_from_attributes(app_node, "property", {
+                                                                 "key": property_key})
+
+            if property_node == None:
+                # Create new node child node of type property
+                property_node = self.create_element(
+                    "property", {"key": property_key, "value": property_value})
+                app_node.appendChild(property_node)
+
+            # update name and email
+            if property_node.getAttribute("value") != property_value:
+                property_node.setAttribute("value", property_value)
+
     """
-    Update KITOS relations in archimate model. 
-    Input is list of relations from KITOS fetched with 
+    Update KITOS relations in archimate model.
+    Input is list of relations from KITOS fetched with
     KitosHelper.return_itsystem_relations()
     """
 
