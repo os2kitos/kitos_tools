@@ -18,6 +18,7 @@
     "archimate.DEFAULT_KLASSIFIKATION": "Ikke klassificeret",
     "archimate.APPLICATION_ID_PREFIX": "kitos_application_id_",
     "archimate.CATEGORY_ID_PREFIX": "kitos_category_id_",
+    "archimate.PROPERTY_NAME_PREFIX": "kitos:",
     "archimate.STORM": {
         "Kontor og Visualisering": [
             "Kontorunderstøttelse",
