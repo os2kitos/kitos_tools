@@ -168,7 +168,7 @@ class KitosHelper:
         :rtype: [type]
         """
         json_data = self._get_itsystems_usage()
-        return len(json_data['response'])
+        return len(json_data)
 
     def _get_itsystems_usage(self):
         """[summary]
@@ -176,11 +176,27 @@ class KitosHelper:
         :return: [description]
         :rtype: [type]
         """
-        return self._kitos_get("api/ItSystemUsage",
-                               {
-                                   "organizationId": self.KITOS_KOMMUNEID,
-                                   "take": "500"
-                               })
+        it_systems = []
+
+        is_last_page = False
+        query_url = "api/ItSystemUsage"
+        page_number = 0
+
+        while not is_last_page:
+            skip = page_number * 100
+            response = self._kitos_get(query_url,
+                                       {
+                                           "organizationId": self.KITOS_KOMMUNEID,
+                                           "take": "100",
+                                           "skip": str(skip)
+                                       })
+            if len(response['response']) > 0:
+                it_systems.extend(response['response'])
+                page_number += 1
+            else:
+                is_last_page = True
+
+        return it_systems
 
     def return_itsystems_count(self):
         return self._get_itsystems_count()
@@ -244,7 +260,7 @@ class KitosHelper:
 
         it_systems = {}
 
-        for it_system in json_data['response']:
+        for it_system in json_data:
             description = it_system['itSystem']['description']
             if description is not None:
                 description = description.replace("\n", " ").replace("\r", " ")
