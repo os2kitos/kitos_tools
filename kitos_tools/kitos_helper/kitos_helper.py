@@ -77,9 +77,12 @@ class KitosHelper:
                                         "password": f"{self.KITOS_PASSWORD}"
                                     })
         if response.status_code == 401:
-            msg = 'Invalid token'
+            #msg = 'Invalid token'
+            msg = 'Invalid user login, no token returned'
+
             logger.error(msg)
-            raise requests.exceptions.RequestException(msg)
+            self.token = "Invalid-User-Login"
+            # raise requests.exceptions.RequestException(msg)
         else:
 
             logger.info('Response HTTP Status Code: {status_code}'.format(
