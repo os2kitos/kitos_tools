@@ -312,9 +312,9 @@ class KitosHelper:
                 'BusinessTypeName': it_system['itSystem']['businessTypeName'],
                 'isBusinessCritical': it_system['isBusinessCritical'],
                 'dba_name': it_system['linkToDirectoryUrlName'],
-                'dba_url': it_system['linkToDirectoryUrl'],
-                'dba_note': it_system['noteUsage'],
-                'dba_workers': it_system['associatedDataWorkers']
+                'dba_url': it_system['linkToDirectoryUrl']
+                #'dba_note': it_system['noteUsage'],
+                #'dba_workers': it_system['associatedDataWorkers']
             }})
 
         return it_systems
