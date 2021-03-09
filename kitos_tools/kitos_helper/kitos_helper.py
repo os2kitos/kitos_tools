@@ -258,6 +258,11 @@ class KitosHelper:
         # Rewrite scructure for IT Systems
         json_data = self._get_itsystems_usage()
 
+        #json_itsystems = json.dumps(json_data)
+        #f = open("itsystems.json", "w")
+        # f.write(json_itsystems)
+        # f.close()
+
         it_systems = {}
 
         for it_system in json_data:
@@ -267,6 +272,8 @@ class KitosHelper:
 
             system_url = "https://kitos.dk/#/system/usage/" + \
                 str(it_system['id']) + "/main"
+
+            # dba_url = "https://kitos.dk/#/data-processing/edit/" + str(it_system[]) + "/main"
 
             it_systems.update({it_system['id']: {
                 'Systemnavn': it_system['itSystem']['name'],
@@ -288,10 +295,14 @@ class KitosHelper:
                 'Kontrakter': self._read_contracts_from_itsystem(it_system['contracts']),
                 'BusinessTypeName': it_system['itSystem']['businessTypeName'],
                 'isBusinessCritical': it_system['isBusinessCritical'],
-                'dba_name': it_system['linkToDirectoryUrlName'],
-                'dba_url': it_system['linkToDirectoryUrl'],
-                'dba_note': it_system['noteUsage'],
-                'dba_workers': it_system['associatedDataWorkers']
+                # 'dba_name': it_system['linkToDirectoryUrlName'],
+                # 'dba_url': it_system['linkToDirectoryUrl'],
+                # 'dba_note': it_system['noteUsage'],
+                # 'dba_workers': it_system['associatedDataWorkers'],
+                'dba_name': "",
+                'dba_url': "",
+                'dba_note': "",
+                'dba_workers': ""
             }})
 
         return it_systems
